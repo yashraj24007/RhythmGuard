@@ -14,13 +14,13 @@ import matplotlib.pyplot as plt
 import random
 from pathlib import Path
 
-# Add current directory to path for imports
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# Add parent directory to path for imports
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from cnn_model import RhythmGuardCNN
-from cnn_ecg_preprocessor import CNNECGPreprocessor
-from severity_predictor import SeverityPredictor
-from cnn_ecg_augmentor import ECGAugmentor
+from src.models.cnn_model import RhythmGuardCNN
+from src.preprocessing.cnn_ecg_preprocessor import CNNECGPreprocessor
+from src.models.severity_predictor import SeverityPredictor
+from src.preprocessing.cnn_ecg_augmentor import ECGAugmentor
 
 class RhythmGuardCNNDemo:
     """CNN Demo Class for RhythmGuard"""

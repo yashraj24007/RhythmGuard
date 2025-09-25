@@ -28,13 +28,20 @@ from pathlib import Path
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-# Import system components
-from train_cnn import train_cnn_model
-from test_cnn_model import test_cnn_model
-from cnn_quick_demo import RhythmGuardCNNDemo
-from cnn_full_evaluation import CNNModelEvaluator
-from cnn_ecg_preprocessor import CNNECGPreprocessor
-from severity_predictor import SeverityPredictor
+# Import system components with new structure
+from src.training.train_cnn import train_cnn_model
+from src.evaluation.test_cnn_model import test_cnn_model
+from src.evaluation.cnn_full_evaluation import CNNModelEvaluator
+from src.preprocessing.cnn_ecg_preprocessor import CNNECGPreprocessor
+from src.models.severity_predictor import SeverityPredictor
+
+# For demo functionality
+try:
+    import sys
+    sys.path.append('scripts')
+    from cnn_quick_demo import RhythmGuardCNNDemo
+except ImportError:
+    RhythmGuardCNNDemo = None
 
 def check_dataset(data_path="."):
     """Check if dataset is properly structured"""
@@ -219,7 +226,7 @@ def predict_single(args):
         return False
     
     # Load model and make prediction
-    from cnn_model import RhythmGuardCNN
+    from src.models.cnn_model import RhythmGuardCNN
     
     cnn_model = RhythmGuardCNN()
     cnn_model.load_model(args.model_path)

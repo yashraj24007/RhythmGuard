@@ -13,11 +13,12 @@ import numpy as np
 import tensorflow as tf
 from pathlib import Path
 
-# Add current directory to path for imports
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# Add paths for imports
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 
-from cnn_model import RhythmGuardCNN
-from severity_predictor import SeverityPredictor
+from src.models.cnn_model import RhythmGuardCNN
+from src.models.severity_predictor import SeverityPredictor
 
 def train_cnn_model(data_path=".", architecture="custom", epochs=50, batch_size=32, 
                    learning_rate=0.001, validation_split=0.2, augment_data=True):

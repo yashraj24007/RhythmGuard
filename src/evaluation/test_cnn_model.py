@@ -17,12 +17,13 @@ import joblib
 from pathlib import Path
 import random
 
-# Add current directory to path for imports
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# Add paths for imports
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 
-from cnn_model import RhythmGuardCNN
-from cnn_ecg_preprocessor import CNNECGPreprocessor
-from severity_predictor import SeverityPredictor
+from src.models.cnn_model import RhythmGuardCNN
+from src.preprocessing.cnn_ecg_preprocessor import CNNECGPreprocessor
+from src.models.severity_predictor import SeverityPredictor
 
 class CNNModelTester:
     """CNN Model Testing and Evaluation Class"""

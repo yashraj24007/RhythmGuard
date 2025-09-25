@@ -8,8 +8,12 @@ import os
 import sys
 import json
 from datetime import datetime
-from train_cnn import train_cnn_model
-from cnn_model import RhythmGuardCNN
+
+# Add parent directory to path for imports
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+from src.training.train_cnn import train_cnn_model
+from src.models.cnn_model import RhythmGuardCNN
 
 def quick_train_and_save():
     """

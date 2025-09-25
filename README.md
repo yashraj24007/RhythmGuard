@@ -70,12 +70,13 @@ pip install -r requirements.txt
 
 ## 🚀 Quick Start
 
-### 1. Dataset Analysis
+### Option 1: One-Click Training (Recommended)
 ```bash
-python rythmguard.py analyze --data_path ./dataset
+# Train model with optimal settings and save automatically
+python scripts/quick_train.py
 ```
 
-### 2. Train CNN Model
+### Option 2: Custom Training
 ```bash
 # Basic training
 python rythmguard.py train --epochs 50 --architecture custom
@@ -84,24 +85,31 @@ python rythmguard.py train --epochs 50 --architecture custom
 python rythmguard.py train --epochs 100 --architecture resnet50 --batch_size 64 --learning_rate 0.0001
 ```
 
-### 3. Test Trained Model
+### Testing & Prediction
 ```bash
-python rythmguard.py test model.h5 --test_split test
+# Test with auto-detected latest model
+python rythmguard.py test
+
+# Test specific model
+python rythmguard.py test --model_path models/rhythmguard_cnn_custom_20240924.keras
+
+# Single ECG prediction
+python rythmguard.py predict --image data/test/N/N123.png
+
+# Check model status
+python src/utils/check_models.py
 ```
 
-### 4. Comprehensive Evaluation
+### Advanced Features
 ```bash
-python rythmguard.py evaluate model.h5 --output_dir evaluation_results
-```
+# Comprehensive evaluation
+python rythmguard.py evaluate --model models/latest.keras
 
-### 5. Single ECG Prediction
-```bash
-python rythmguard.py predict model.h5 path/to/ecg_image.png
-```
+# Interactive demo
+python rythmguard.py demo --mode single
 
-### 6. Interactive Demo
-```bash
-python rythmguard.py demo --model_path model.h5 --demo_mode full
+# Environment setup check
+python src/utils/setup_check.py
 ```
 
 ## 📊 Model Architectures
