@@ -1,0 +1,18 @@
+{
+  "model_name": "rhythmguard_cnn_limited_custom_20250925_085510",
+  "timestamp": "20250925_085510",
+  "config": {
+    "data_path": "data_limited",
+    "epochs": 20,
+    "batch_size": 8,
+    "architecture": "custom",
+    "learning_rate": 0.001,
+    "validation_split": 0.3,
+    "augment_data": true
+  },
+  "training_type": "limited_data",
+  "samples_per_class": 10,
+  "final_accuracy": 0.1666666716337204,
+  "final_loss": 1.7904058694839478,
+  "training_completed": true
+}
