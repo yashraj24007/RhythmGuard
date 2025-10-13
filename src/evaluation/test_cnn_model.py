@@ -226,8 +226,14 @@ class CNNModelTester:
         
         return report
     
-    def plot_confusion_matrix(self, results, save_path=None):
-        """Plot confusion matrix"""
+    def plot_confusion_matrix(self, results, save_path=None, final_matrix=False):
+        """Plot confusion matrix
+
+        Args:
+            results: dict with 'true_classes', 'predicted_classes', 'class_names'
+            save_path: legacy single-file save path (counts only)
+            final_matrix: when True, also save standardized 'Final Matrix' images
+        """
         if results is None:
             return
         
@@ -244,7 +250,8 @@ class CNNModelTester:
             xticklabels=results['class_names'],
             yticklabels=results['class_names']
         )
-        plt.title('CNN Model - Confusion Matrix')
+    title = 'Final Matrix (Counts)' if final_matrix else 'CNN Model - Confusion Matrix'
+    plt.title(title)
         plt.ylabel('True Label')
         plt.xlabel('Predicted Label')
         plt.tight_layout()
@@ -255,6 +262,54 @@ class CNNModelTester:
         
         plt.show()
         
+        # Additionally save standardized Final Matrix artifacts when requested
+        if final_matrix:
+            output_dir = Path('rythmguard_output') / 'visualizations'
+            output_dir.mkdir(parents=True, exist_ok=True)
+
+            # Save counts
+            counts_file = output_dir / 'final_matrix.png'
+            plt.figure(figsize=(10, 8))
+            sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+                        xticklabels=results['class_names'],
+                        yticklabels=results['class_names'])
+            plt.title('Final Matrix (Counts)')
+            plt.ylabel('True Label')
+            plt.xlabel('Predicted Label')
+            plt.tight_layout()
+            plt.savefig(counts_file, dpi=300, bbox_inches='tight')
+            plt.close()
+
+            # Save row-normalized (recall)
+            cm_row = cm.astype(float) / cm.sum(axis=1, keepdims=True).clip(min=1)
+            row_file = output_dir / 'final_matrix_row_norm.png'
+            plt.figure(figsize=(10, 8))
+            sns.heatmap(cm_row, annot=True, fmt='.2f', cmap='Blues',
+                        xticklabels=results['class_names'],
+                        yticklabels=results['class_names'])
+            plt.title('Final Matrix (Row-Norm = Recall)')
+            plt.ylabel('True Label')
+            plt.xlabel('Predicted Label')
+            plt.tight_layout()
+            plt.savefig(row_file, dpi=300, bbox_inches='tight')
+            plt.close()
+
+            # Save column-normalized (precision)
+            cm_col = cm.astype(float) / cm.sum(axis=0, keepdims=True).clip(min=1)
+            col_file = output_dir / 'final_matrix_col_norm.png'
+            plt.figure(figsize=(10, 8))
+            sns.heatmap(cm_col, annot=True, fmt='.2f', cmap='Blues',
+                        xticklabels=results['class_names'],
+                        yticklabels=results['class_names'])
+            plt.title('Final Matrix (Col-Norm = Precision)')
+            plt.ylabel('True Label')
+            plt.xlabel('Predicted Label')
+            plt.tight_layout()
+            plt.savefig(col_file, dpi=300, bbox_inches='tight')
+            plt.close()
+
+            print(f"📁 Final Matrix saved to: {output_dir}")
+
         return cm
     
     def analyze_misclassifications(self, results, top_k=5):
@@ -397,7 +452,7 @@ def test_cnn_model(model_path, data_path=".", test_split='test',
     
     # Plot confusion matrix
     cm_path = f"cnn_confusion_matrix_{test_split}.png" if save_results else None
-    tester.plot_confusion_matrix(results, cm_path)
+    tester.plot_confusion_matrix(results, cm_path, final_matrix=True if save_results else False)
     
     # Analyze misclassifications
     tester.analyze_misclassifications(results)

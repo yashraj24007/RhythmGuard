@@ -190,8 +190,15 @@ class CNNModelEvaluator:
         
         return report_dict, clinical_df
     
-    def plot_confusion_matrix(self, results, normalize=False, save_plot=True):
-        """Plot and analyze confusion matrix"""
+    def plot_confusion_matrix(self, results, normalize=False, save_plot=True, final_matrix=False):
+        """Plot and analyze confusion matrix
+
+        Args:
+            results: dict with 'true_classes', 'predicted_classes', 'class_names'
+            normalize: when True, row-normalize to show recall per class
+            save_plot: whether to save the figure to disk
+            final_matrix: when True, title and filename use 'Final Matrix'
+        """
         if results is None:
             return None
         
@@ -225,14 +232,16 @@ class CNNModelEvaluator:
             cbar_kws={'label': 'Count' if not normalize else 'Proportion'}
         )
         
-        plt.title(f'CNN Confusion Matrix{title_suffix}')
+    base_title = 'Final Matrix' if final_matrix else 'CNN Confusion Matrix'
+    plt.title(f'{base_title}{title_suffix}')
         plt.ylabel('True Label')
         plt.xlabel('Predicted Label')
         plt.tight_layout()
         
         if save_plot:
             suffix = '_normalized' if normalize else ''
-            cm_file = self.output_dir / f'confusion_matrix{suffix}.png'
+            base_name = 'final_matrix' if final_matrix else 'confusion_matrix'
+            cm_file = self.output_dir / f'{base_name}{suffix}.png'
             plt.savefig(cm_file, dpi=300, bbox_inches='tight')
             print(f"📊 Confusion matrix saved: {cm_file}")
         
